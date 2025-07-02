@@ -7,6 +7,21 @@
     <title>专辑列表</title>
 </head>
 <body>
+    <nav class="navigation-bar">
+        <a href="/" class="nav-link">
+            <span class="album-icon"></span> Classical Collection 首页
+        </a>
+        <a href="/albums" class="nav-link">
+            <span class="album-icon"></span> 专辑
+        </a>
+        <a href="/conductors" class="nav-link">
+            <span class="album-icon"></span> 指挥
+        </a>
+        <a href="/songs" class="nav-link">
+            <span class="album-icon"></span> 作品
+        </a>
+    </nav>
+    
     <header>
         <h1>专辑列表</h1>
         <p class="subtitle">探索精彩的古典音乐专辑收藏</p>
@@ -71,6 +86,30 @@
             text-align: center;
             padding-bottom: 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navigation-bar {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
         }
         
         h1 {
