@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} - Conductor</title>
+</head>
+<body>
+    <h1>{{ name }}</h1>
+    <div style="display: flex; align-items: flex-start; gap: 20px;">
+        <div>
+            <h2>简介</h2>
+            <p>
+                {{ introduction }}
+            </p>
+        </div>
+        <div>
+            <h2>
+                <a href="{{ url }}" target="_blank">Apple Music 主页</a>
+            </h2>
+            <p>本站已收录专辑数量：{{ albums|length }}</p>
+            <img src="{{ image }}" alt="{{ name }}" style="max-width: 300px;" />
+        </div>
+    </div>
+    <h2>专辑列表</h2>
+    <div class="collection-grid">
+        {% for album in albums %}
+        <div class="collection-card">
+            <img src="{{ album.image }}" alt="{{ album.name }}" class="collection-image" />
+            <div class="collection-info">
+                <h3 class="collection-title">
+                    <a href="/album/{{ album.id }}">{{ album.name }}</a>
+                </h3>
+                {% if album.release_date %}
+                <p class="collection-date">{{ album.release_date }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <style>
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .collection-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .collection-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .collection-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .collection-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .collection-title {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        
+        .collection-title a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .collection-title a:hover {
+            text-decoration: underline;
+        }
+        
+        .collection-date {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: auto;
+        }
+    </style>
+</body>
+</html>

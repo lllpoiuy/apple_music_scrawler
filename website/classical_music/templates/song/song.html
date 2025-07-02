@@ -1,0 +1,267 @@
+<!-- <h1>{{ name }} </a></h1>
+<p>Composer: {{ composer }}</p>
+<p>Movements:</p>
+<ul>
+    {% for movement in movements %}
+    <li>
+        <p>{{ movement }}</p>
+    </li>
+    {% endfor %}
+</ul> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} - 作品</title>
+</head>
+<body>
+    <header>
+        <h1>{{ name }}</h1>
+    </header>
+
+    
+    <div class="song-container">
+        <div class="song-cover">
+            <img src="{{ album_image }}" alt="{{ name }}" />
+            <a href="{{ url }}" target="_blank" class="apple-music-link">
+                <i class="apple-icon"></i> 在 Apple Music 上收听
+            </a>
+        </div>
+        
+        <div class="song-info">
+            <div class="song-metadata">
+                <div class="metadata-item">
+                    <span class="metadata-label">专辑：</span>
+                    <a href="/album/{{ album_id }}" class="metadata-link">{{ album_name }}</a>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">指挥：</span>
+                    <a href="/conductor/{{ conductor_id }}" class="metadata-link">{{ conductor_name }}</a>
+                </div>
+            </div>
+            
+            <div class="movements-section">
+                <h2>乐章列表</h2>
+                <div class="movement-list">
+                    {% for movement in movements %}
+                    <div class="movement-item">
+                        <span class="movement-number">{{ forloop.counter }}</span>
+                        <span class="movement-name">{{ movement }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        header {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .composer-info {
+            font-size: 1rem;
+            color: #aaa;
+        }
+
+        .composer-label {
+            margin-right: 5px;
+        }
+
+        .composer-name {
+            color: #ddd;
+            font-weight: 500;
+        }
+
+        .navigation-bar {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+        }
+
+        .album-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>') no-repeat center center;
+            margin-right: 8px;
+        }
+
+        .song-container {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .song-cover {
+            flex: 0 0 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .song-cover img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease;
+        }
+
+        .song-cover img:hover {
+            transform: scale(1.02);
+        }
+
+        .apple-music-link {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #fa233b, #fb5c74);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            align-self: center;
+        }
+
+        .apple-music-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(251, 92, 116, 0.4);
+            text-decoration: none;
+        }
+
+        .apple-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12.7 2C14.4 2 16.5 3 17.6 4.4 16.1 5.5 15.1 7.5 15.1 9.5 15.1 11.6 16.2 13.6 17.8 14.7 16.8 16.2 14.9 17 13.1 17 11.9 17 11 16.6 10.2 16.3 9.5 16 8.8 15.7 7.8 15.7 6.7 15.7 5.9 16 5.2 16.3 4.4 16.6 3.6 17 2.5 17 0.9 17 0 16.5 0 15.7 0 15.2 0.2 14.7 0.5 14.2 1.2 13.1 1.5 11.5 1.5 9.5 1.5 7.5 2.3 5.6 3.6 4.4 4.9 3.1 6.8 2 8.7 2 9.9 2 10.7 2.4 11.4 2.7 12.1 3 12.7 3.3 13.7 3.3 14.6 3.3 15.3 3 16 2.7 16.7 2.4 17.4 2 18.7 2 19.6 2 20.4 2.1 21.1 2.4"></path></svg>') no-repeat center center;
+            margin-right: 10px;
+        }
+
+        .song-info {
+            flex: 1;
+        }
+
+        .song-metadata {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .metadata-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .metadata-label {
+            color: #888;
+            font-size: 0.95rem;
+            margin-right: 8px;
+            min-width: 50px;
+        }
+
+        .metadata-link {
+            color: #ccc;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .metadata-link:hover {
+            color: white;
+            border-bottom-color: white;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            color: #ccc;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .movement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .movement-item {
+            padding: 12px 15px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .movement-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .movement-number {
+            display: inline-block;
+            width: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+            margin-right: 15px;
+        }
+
+        .movement-name {
+            color: inherit;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .song-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .song-cover {
+                flex: 0 0 auto;
+                max-width: 250px;
+                align-self: center;
+            }
+        }
+    </style>
+</body>
