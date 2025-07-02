@@ -1,8 +1,8 @@
-
 from .models import Conductor, Album, Song
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 def show_conductor(request, id):
     conductor = Conductor.objects.get(conductor_id=str(id))
@@ -90,5 +90,75 @@ def show_songs(request):
     template = loader.get_template('song/songs.html')
     context = {
         'page_obj': page_obj
+    }
+    return HttpResponse(template.render(context, request))
+
+def search(request):
+    query = request.GET.get('query', '')
+    
+    if query:
+        # Search in all three models
+        conductors = Conductor.objects.filter(
+            Q(name__icontains=query) | 
+            Q(introduction__icontains=query)
+        )
+        
+        albums = Album.objects.filter(
+            Q(name__icontains=query) | 
+            Q(conductor_name__icontains=query)
+        )
+        
+        songs = Song.objects.filter(
+            Q(name__icontains=query) | 
+            Q(composer__icontains=query) | 
+            Q(conductor_name__icontains=query) | 
+            Q(album_name__icontains=query)
+        )
+    else:
+        conductors = Album.objects.none()
+        albums = Album.objects.none()
+        songs = Song.objects.none()
+    
+    template = loader.get_template('base/search.html')
+    context = {
+        'query': query,
+        'conductors': conductors,
+        'albums': albums,
+        'songs': songs
+    }
+    
+    return HttpResponse(template.render(context, request))
+
+def home(request):
+    # Import for random selection
+    import random
+    
+    # Get all conductors, albums, and songs
+    all_conductors = list(Conductor.objects.all())
+    all_albums = list(Album.objects.all())
+    all_songs = list(Song.objects.all())
+    
+    # Randomly select 3 featured conductors (or fewer if there aren't enough)
+    featured_conductors = random.sample(all_conductors, min(3, len(all_conductors))) if all_conductors else []
+    
+    # Randomly select 3 featured albums (or fewer if there aren't enough)
+    featured_albums = random.sample(all_albums, min(3, len(all_albums))) if all_albums else []
+    
+    # Randomly select 3 featured songs (or fewer if there aren't enough)
+    featured_songs = random.sample(all_songs, min(3, len(all_songs))) if all_songs else []
+    
+    # Get one featured item for each category display
+    featured_conductor = random.choice(all_conductors) if all_conductors else None
+    featured_album = random.choice(all_albums) if all_albums else None
+    featured_song = random.choice(all_songs) if all_songs else None
+    
+    template = loader.get_template('base/home.html')
+    context = {
+        'featured_conductors': featured_conductors,
+        'featured_albums': featured_albums,
+        'featured_songs': featured_songs,
+        'featured_conductor': featured_conductor,
+        'featured_album': featured_album,
+        'featured_song': featured_song
     }
     return HttpResponse(template.render(context, request))
