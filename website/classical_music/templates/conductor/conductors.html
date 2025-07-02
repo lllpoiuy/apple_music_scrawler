@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>指挥家列表</title>
+</head>
+<body>
+    <header>
+        <h1>指挥家列表</h1>
+        <p class="subtitle">探索古典音乐世界的杰出指挥家</p>
+    </header>
+
+    <div class="conductors-grid">
+        {% for conductor in page_obj %}
+            <a href="/conductor/{{ conductor.conductor_id }}" class="conductor-card">
+                <div class="conductor-image-container">
+                    <img src="{{ conductor.image }}" alt="{{ conductor.name }}" class="conductor-image">
+                </div>
+                <div class="conductor-name">{{ conductor.name }}</div>
+            </a>
+        {% endfor %}
+    </div>
+    
+    <div class="pagination">
+        <div class="pagination-info">
+            第 {{ page_obj.number }} 页，共 {{ page_obj.paginator.num_pages }} 页
+        </div>
+        <div class="pagination-controls">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="pagination-link pagination-first">
+                    <i class="pagination-icon-first"></i> 首页
+                </a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="pagination-link pagination-prev">
+                    <i class="pagination-icon-prev"></i> 上一页
+                </a>
+            {% else %}
+                <span class="pagination-link pagination-disabled">
+                    <i class="pagination-icon-first"></i> 首页
+                </span>
+                <span class="pagination-link pagination-disabled">
+                    <i class="pagination-icon-prev"></i> 上一页
+                </span>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="pagination-link pagination-next">
+                    下一页 <i class="pagination-icon-next"></i>
+                </a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link pagination-last">
+                    末页 <i class="pagination-icon-last"></i>
+                </a>
+            {% else %}
+                <span class="pagination-link pagination-disabled">
+                    下一页 <i class="pagination-icon-next"></i>
+                </span>
+                <span class="pagination-link pagination-disabled">
+                    末页 <i class="pagination-icon-last"></i>
+                </span>
+            {% endif %}
+        </div>
+    </div>
+    
+    <style>
+        header {
+            margin-bottom: 30px;
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .conductors-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 30px;
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .conductor-card {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .conductor-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+        }
+        
+        .conductor-image-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .conductor-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .conductor-card:hover .conductor-image {
+            transform: scale(1.05);
+        }
+        
+        .conductor-name {
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-top: 5px;
+            color: #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .conductors-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, auto);
+                gap: 20px;
+            }
+            
+            .conductor-image-container {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .pagination-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+        }
+        
+        /* Pagination Styles */
+        .pagination {
+            margin-top: 40px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .pagination-info {
+            color: #888;
+            font-size: 0.95rem;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .pagination-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .pagination-link:hover:not(.pagination-disabled) {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .pagination-disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .pagination-icon-first,
+        .pagination-icon-prev,
+        .pagination-icon-next,
+        .pagination-icon-last {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            position: relative;
+        }
+        
+        .pagination-icon-first {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/></svg>') no-repeat center center;
+            margin-right: 5px;
+        }
+        
+        .pagination-icon-prev {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>') no-repeat center center;
+            margin-right: 5px;
+        }
+        
+        .pagination-icon-next {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>') no-repeat center center;
+            margin-left: 5px;
+        }
+        
+        .pagination-icon-last {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"/></svg>') no-repeat center center;
+            margin-left: 5px;
+        }
+    </style>
+</body>
+</html>
